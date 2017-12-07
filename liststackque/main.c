@@ -190,6 +190,13 @@ void printList(){
     }
 }
 
+void printListBack(){
+    struct CELL *p;
+    for( p = header.prev; p != &header; p = p -> prev){
+        printf("%ld\n", p -> value );
+    }
+}
+
 
 
 int main(int argc, const char * argv[]) {
@@ -307,8 +314,9 @@ int main(int argc, const char * argv[]) {
             case 3:
                 a = 0;
                 printf("セルをインサート : 1\n");
-                printf("リストを一覧表示 : 2\n");
-                printf("セルを削除 : 3\n");
+                printf("リストを一覧表示(昇順） : 2\n");
+                printf("リストを一覧表示(降順） : 3\n");
+                printf("セルを削除 : 4\n");
                 scanf("%d", &a);
                 if( a == 1 ){
                     int flg = 1;
@@ -341,11 +349,14 @@ int main(int argc, const char * argv[]) {
                     printf("リストに入っているデータは以下の通りです\n");
                     printList();
                 }else if(a == 3){
+                    printf("リストに入っているデータは以下の通りです\n");
+                    printListBack();
+                }else if(a == 4){
                     int a = 0;
                     printf("好きな数字を入力してください\n");
                     scanf("%d", &a);
                     delete(a);
-                    printf("a番目の数字が削除されました。\n");
+                    printf("入力した数字番目の要素が削除されました。\n");
                 }else{
                     
                 }
