@@ -167,19 +167,19 @@ int insert(long value){
 }
 
 int delete(int number){
-    struct CELL *current, *p;
+    struct CELL *current;
     current = &header;
-    for(int i = 1; i < number; i++){
+    if(number < 1)
+        error("the cell doesnt exist\n");
+    for(int i = 1; i <= number; i++){
         if(current -> next == &header)
             error("the cell doesnt exists\n");
         current = current -> next;
         
     }
-    p = current -> next;
-    if(p == NULL)
-        error("the cell doesnt exist\n");
-    current -> next = p -> next;
-    free(p);
+    current -> prev -> next = current -> next;
+    current -> next -> prev = current -> prev;
+    free(current);
     return 1;
 }
 
