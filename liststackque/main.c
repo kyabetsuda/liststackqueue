@@ -30,7 +30,8 @@ int rear;
 
 struct CELL{
     struct CELL *next;
-    int value;
+    struct CELL *prev;
+    long value;
 };
 //連結リストの先頭
 struct CELL header;
@@ -145,20 +146,23 @@ int empty_quque(){
 //    return 1;
 //}
 
-int insert(int value){
-    struct CELL *p, *q, *new;
-    
-    p = header.next;
-    q = &header;
-    while(p != NULL && value > p -> value){
-        q = p;
+int insert(long value){
+    struct CELL *p, *new;
+    new = malloc(sizeof(struct CELL));
+    p = &header;
+    while( 1 ){
+        if(p -> next == &header)
+            break;
+        if(value < p -> next -> value)
+            break;
         p = p -> next;
     }
-    if ((new = malloc(sizeof(struct CELL))) == NULL )
-        error("fatal error");
-    new -> next = p;
+    new -> prev = p;
+    new -> next = p -> next;
     new -> value = value;
-    q -> next = new;
+    p ->next -> prev = new;
+    p ->next = new;
+
     return 1;
 }
 
@@ -166,7 +170,10 @@ int delete(int number){
     struct CELL *current, *p;
     current = &header;
     for(int i = 1; i < number; i++){
+        if(current -> next == &header)
+            error("the cell doesnt exists\n");
         current = current -> next;
+        
     }
     p = current -> next;
     if(p == NULL)
@@ -177,10 +184,9 @@ int delete(int number){
 }
 
 void printList(){
-    struct CELL *p = header.next;
-    while( p != NULL){
-        printf("%d\n", p -> value );
-        p = p -> next;
+    struct CELL *p;
+    for( p = header.next; p != &header; p = p -> next){
+        printf("%ld\n", p -> value );
     }
 }
 
@@ -316,7 +322,8 @@ int main(int argc, const char * argv[]) {
                             printf("好きな数字を入力してください\n");
                             scanf("%d", &b );
                             if( check == 1 ){
-                                header.next = NULL;
+                                header.next = &header;
+                                header.prev = &header;
                                 header.value = 0;
                                 insert(b);
                                 check = 0;
